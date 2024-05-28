@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
+    environment:
+      - "DEBUG=${DEBUG-}"
+      - "DOCKER_HOST=unix:///var//run/docker.sock"
+    volumes:
+      - "./scripts/aws/init.sh:/etc/localstack/init/ready.d/init-aws.sh"
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      - cache:/data
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: local.Dockerfile
+    working_dir: /usr/src/app
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - localstack
+      - cache
+    ports:
+      - "3080:3080"
+    environment:
+      NODE_ENV: development
+      PORT: 3080
+      REDIS_URL: redis://cache:6379
+      REDIS_PASSWORD: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+      AWS_DYNAMODB_ENDPOINT: "http://localstack:4566"
+      AWS_DYNAMODB_VERSION: "2012-08-10"
+      AWS_DYNAMODB_CLIENT_TABLE: "local-clients"
+      AWS_DYNAMODB_CHAT_TABLE: "local-chats"
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: "test"
+      AWS_SECRET_ACCESS_KEY: "test"
+      ADMIN_CLIENT_ID: "TEMP.MESSAGING.ADMIN"
+    links:
+      - localstack
+      - cache
+    volumes:
+      - ./:/usr/src/app/
+      - /usr/src/app/env/
+
+volumes:
+  cache:
+    driver: local

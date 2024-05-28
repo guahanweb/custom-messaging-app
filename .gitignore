@@ -1,0 +1,16 @@
+node_modules/
+.vscode
+.cache/
+public/static
+*.marko.js
+.env.example
+.logs/*.log
+dist/
+volume/
+
+*.env
+!.local.env
+!.development.env
+env/
+!env/.local.env
+!env/.development.env
