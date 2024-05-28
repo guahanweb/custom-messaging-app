@@ -11,7 +11,7 @@ export interface IConversationObject {
     title?: string;
 }
 
-function clean({ pk, sk, pData, created, title, members, lastTimestamp, ...meta }: any) {
+function clean({ pk, created, title, members, lastTimestamp, ...meta }: any) {
     return {
         ...meta,
         id: pk,
@@ -44,7 +44,7 @@ export async function read(id: string) {
     const result = await getItem(tables.chat, { pk: id, sk: 'CHAT' });
     const conversation = result && result.Item;
 
-    return !!conversation
+    return conversation
         ? clean(conversation)
         : null;
 }

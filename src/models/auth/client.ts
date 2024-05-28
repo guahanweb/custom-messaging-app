@@ -1,4 +1,3 @@
-import crypto from 'crypto'
 import config from '../../config'
 import * as pw from '../../lib/password'
 import { putItem, getItem } from '../../dao/dynamodb'
@@ -19,7 +18,7 @@ const CLIENT = 'CLIENT';
 const API_KEY = 'KEY';
 
 function cleanClient(data: any) {
-    let result = {
+    const result = {
         ...data,
         client_id: data.pk,
     };

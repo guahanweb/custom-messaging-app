@@ -1,5 +1,4 @@
 import config from '../config'
-import * as pw from '../lib/password'
 import { putItem, getItem } from '../dao/dynamodb'
 
 const { tables } = config.aws.dynamo;

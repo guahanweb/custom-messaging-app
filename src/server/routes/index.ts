@@ -3,7 +3,7 @@ import authRouter from './authorization'
 import chatRouter from './chat'
 import * as processController from '../../controllers/process-controller'
 
-export default function (opts?: any) {
+export default function () {
     const router = Router();
 
     router.use('/auth', authRouter());

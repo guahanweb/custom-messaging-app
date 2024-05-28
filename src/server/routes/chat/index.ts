@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import * as chatController from '../../../controllers/chat-controller'
 
-export default function(opts?: any) {
+export default function() {
     const router = Router();
 
     router.post('/conversations', chatController.createConversation());

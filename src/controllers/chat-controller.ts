@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import * as conversation from '../models/conversation'
 import * as message from '../models/message'
-import * as user from '../models/user'
 
 export function createConversation() {
     return async function (req: Request, res: Response) {

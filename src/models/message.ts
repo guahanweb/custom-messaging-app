@@ -1,6 +1,6 @@
 import { QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import config from '../config'
-import { putItem, getItem, query } from '../dao/dynamodb'
+import { putItem, query } from '../dao/dynamodb'
 import crypto from 'crypto'
 
 const { tables } = config.aws.dynamo;
@@ -14,7 +14,7 @@ export interface IMessageObject {
     attachments: any[]; // TODO: support message attachments
 }
 
-function clean({ pk, sk, pData, author, content, timestamp, conversationId, attachments }: any) {
+function clean({ pk, author, content, timestamp, conversationId, attachments }: any) {
     return {
         id: pk,
         author,
@@ -61,7 +61,7 @@ export async function listByConversation(conversationId: string, lastIndex = nul
     const result = await query(options);
     const records = result && result.Items;
 
-    return !!records
+    return records
         ? records.map(clean)
         : [];
 }

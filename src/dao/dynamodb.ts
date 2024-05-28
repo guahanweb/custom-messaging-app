@@ -6,7 +6,6 @@ import {
     QueryCommand,
     UpdateCommand,
     QueryCommandInput,
-    UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb'
 import config from '../config'
 

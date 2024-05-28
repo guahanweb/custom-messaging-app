@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import redis from '../dao/redis'
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const resDotSendInterceptor = (res: Response, send: Function) => (content: any) => {
     (res as any).contentBody = content;
     (res as any).send = send;

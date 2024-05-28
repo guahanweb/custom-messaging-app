@@ -3,6 +3,7 @@ import * as anonymousId from '../models/anonymous-id'
 
 const MAX_AGE = 365 * 24 * 60 * 60; // 365 days in seconds
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function (options?: any) {
     return (req: Request, res: Response, next: NextFunction) => {
         try {
