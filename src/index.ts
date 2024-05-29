@@ -13,7 +13,9 @@ export async function main() {
 
     // set up server
     await bootstrap();
-    const { server } = await createServer();
+    const { server } = await createServer({
+        enableSessions: config.server.session.enabled,
+    });
     const { port } = config.server;
 
     server.listen(port);

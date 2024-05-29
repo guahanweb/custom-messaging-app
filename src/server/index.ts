@@ -4,19 +4,37 @@ import bodyParser from "body-parser";
 import nunjucks from 'nunjucks';
 import config from '../config';
 import preflightInfo from "../middlewares/preflight-info";
+import { initialize as initializeSessions } from "./session-management";
 import Router from './routes'
+
+interface ICreateServerOptions {
+  enableSessions: boolean;
+}
 
 interface ICreateServerResponse {
   app: Express;
   server: http.Server;
 }
 
-export async function createServer(): Promise<ICreateServerResponse> {
+const defaultServerOpts: ICreateServerOptions = {
+  enableSessions: false,
+}
+
+export async function createServer(opts?: ICreateServerOptions): Promise<ICreateServerResponse> {
   const app = express();
   const server = http.createServer(app);
+  const options = {
+    ...defaultServerOpts,
+    ...opts,
+  };
 
   if (config.environment === 'production') {
     app.set('trust proxy', 1);
+  }
+
+  // enable sessions
+  if (options.enableSessions) {
+      initializeSessions(app);
   }
 
   app.use(preflightInfo());

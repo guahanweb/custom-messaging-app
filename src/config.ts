@@ -50,6 +50,11 @@ export interface RedisConfig {
 export interface ServerConfig {
     port: number | null;
     host?: string | null;
+
+    session: {
+        enabled: boolean;
+        secret?: string;
+    }
 }
 
 export interface AppConfig {
@@ -73,6 +78,11 @@ const init = function(): AppConfig {
         server: {
             port: loadFromEnv('PORT', 4000),
             host: loadFromEnv('HOST', 'localhost'),
+
+            session: {
+                enabled: loadFromEnv('ENABLE_SESSIONS', false),
+                secret: 'testing-123',
+            }
         },
         aws: {
             endpoint: loadFromEnv('AWS_ENDPOINT', undefined),

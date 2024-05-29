@@ -48,6 +48,7 @@ services:
       AWS_ACCESS_KEY_ID: "test"
       AWS_SECRET_ACCESS_KEY: "test"
       ADMIN_CLIENT_ID: "TEMP.MESSAGING.ADMIN"
+      ENABLE_SESSIONS: true
     links:
       - localstack
       - cache
