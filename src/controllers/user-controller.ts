@@ -6,11 +6,22 @@ export function register() {
 
     return async function (req: Request, res: Response) {
         try {
-            if (!requiredFields.every((field: string) => req.body.hasOwnProperty(field))) {
+            const payload = req.body;
+
+            if (!requiredFields.every((field: string) => payload.hasOwnProperty(field))) {
                 res.status(422).send({ error: 'unprocessable entity', message: 'missing required properties' });
             } else {
                 // TODO: any additional validation
+                const lookup = await users.lookup(payload.email);
+                if (lookup !== null)
+                    return res.status(409).send({ error: 'conflict', message: 'email address already exists' });
+
+                const record = await users.read(payload.username);
+                if (record !== null)
+                    return res.status(409).send({ error: 'conflict', message: 'username already in use' });
+
                 const user = await users.create(req.body);
+                (req.session as any).user = user;
                 res.send({ user });
             }
         } catch (err: any) {
